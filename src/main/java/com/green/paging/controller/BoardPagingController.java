@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.green.BoardApplication;
 import com.green.board.dto.BoardDto;
+import com.green.board.mapper.BoardMapper;
 import com.green.interceptor.AuthInterceptor;
 import com.green.menus.dto.MenuDTO;
 import com.green.menus.mapper.MenuMapper;
@@ -20,29 +21,19 @@ import com.green.paging.mapper.BoardPagingMapper;
 @RequestMapping("/BoardPaging")
 public class BoardPagingController {
 
-    private final BoardApplication boardApplication;
-
-    private final AuthInterceptor authInterceptor;
-
-	@Autowired
+ 	@Autowired
 	private  MenuMapper         menuMapper;
 	
 	@Autowired
 	private  BoardPagingMapper  boardPagingMapper;
-
-
-    BoardPagingController(AuthInterceptor authInterceptor, BoardApplication boardApplication) {
-        this.authInterceptor = authInterceptor;
-        this.boardApplication = boardApplication;
-    } 
-
 	
-	// /BoardPaging/List?menu_id=MENU01&nowpage=1
+	// /BoardPaging/List?menu_id=MENU01&nowpage=1 // searchType과 keyword는 null이 전달됨
+	// /BoardPaging/List?menu_id=MENU01&nowpage=6&searchType=&keyword=	// searchType과 keyword는 ''(빈문자열)가 전달됨 
 	@RequestMapping("/List")
 	public  ModelAndView   list( BoardDto boardDto, int nowpage, 
 			String  searchType, String keyword ) {
 		
-		// 메뉴목록 : menus.jsp 용
+		// 전체 메뉴목록 : menus.jsp 용
 		List<MenuDTO>  menuList =  menuMapper.getMenuList();
 		
 		// 게시물 목록 조회(페이징해서)
@@ -81,13 +72,54 @@ public class BoardPagingController {
 		
 		mv.addObject("bList",      list);
 		mv.addObject("searchDto",  searchDto);
+		
 		mv.addObject("searchType",	searchType);
 		mv.addObject("keyword",		keyword);
 			
 		
 		return  mv;		
 	}
+	// /BoardPaging/View?idx=208&menu_id=MENU01&nowpage=1
+	@RequestMapping("/View")
+	public ModelAndView view (BoardDto boardDto, int nowpage) {
+		
+		// 전체 메뉴목록 : menus.jsp 용
+		List<MenuDTO>  menuList =  menuMapper.getMenuList();
+		
+		// idx로 게시글 한 개 조회
+		BoardDto board	=	boardPagingMapper.getBoard(boardDto);
+		String	menu_id	=	boardDto.getMenu_id();
+		
+		ModelAndView   mv       =  new ModelAndView();
+		mv.setViewName("boardpaging/view");
+		mv.addObject("menuList", menuList);
+		mv.addObject("board", board);
+		mv.addObject("menu_id", menu_id);
+		mv.addObject("nowpage", nowpage);
+		
+		return  mv;
+	}
 	
-	// /BoardPaging/WriteForm?menu_id=MENU01&nowpage=1
+	// /BoardPaging/WriteForm?menu_id=${board.menu_id}&nowpage=${nowpage}
+	@RequestMapping("/WriteForm")
+	public ModelAndView writeForm (BoardDto boardDto, int nowpage) {
+		
+		// 전체 메뉴목록 : menus.jsp 용
+		List<MenuDTO>  menuList =  menuMapper.getMenuList();
+		
+		String menu_id		=	boardDto.getMenu_id();
+		ModelAndView   mv       =  new ModelAndView();
+		mv.setViewName("boardpaging/write");
+		mv.addObject("menuList", menuList);
+		mv.addObject("nowpage", nowpage);
+		mv.addObject("menu_id", menu_id);
+		mv.addObject("boardDto", boardDto);
+		return mv;
+	}
+	
+	
+	// /BoardPaging/UpdateForm?idx=${board.idx}&menu_id=${board.menu_id}&nowpage=${nowpage}
+	
+	// /BoardPaging/Delete?idx=${board.idx}&menu_id=${board.menu_id}&nowpage=${nowpage}
 	
 }

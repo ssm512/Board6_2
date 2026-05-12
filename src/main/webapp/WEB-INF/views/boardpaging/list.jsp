@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Paging List</title>
 <link rel="shortcut icon" href="/img/favicon2.png" type="image/x-icon">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -98,7 +98,7 @@
 	    <tr>
 	      <td> ${  board.idx      }  </td>    <!-- menu.getMenu_id() -->
 	      <td class="title"> 
-	        <a href ="/Board/View?idx=${board.idx}&menu_id=${menu_id}">
+	        <a href ="/BoardPaging/View?idx=${board.idx}&menu_id=${menu_id}&nowpage=${nowpage}">
 	        ${ board.title    }
 	        </a>  
 	      </td>
@@ -115,7 +115,7 @@
 	  <input type="hidden" name="nowpage" value="${ nowpage }" />	  
 	  <div id="search">
 	    <select name="searchType">
-	      <option value="title">제목</option> 
+	      <option value="title">제목</option> 	<!-- searchType=title -->
 	      <option value="content">내용</option> 
 	      <option value="writer">작성자</option> 
 	    </select>

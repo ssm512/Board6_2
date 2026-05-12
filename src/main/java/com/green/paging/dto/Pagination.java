@@ -18,7 +18,7 @@ import lombok.ToString;
 @ToString 
 public class Pagination {
 	private   int       totalCount;      // 해당메뉴의 조회된 자료수
-	private   int       totalPageCount;  // 전체 페이지수 : totalCount / numOfRows
+	private   int       totalPageCount;  // 전체 페이지수 : totalCount / numOfRows 올림
 	
 	private   int       startPage;
 	private   int       endPage;
@@ -43,8 +43,8 @@ public class Pagination {
 		this.totalPageCount  =  (int) Math.ceil( (double) this.totalCount / (double) numOfRows );
 		
 		// 현재 페이지 : pageNo <- nowpage
-		int  pageNo          =  srchDto.getPageNo();
-		if( pageNo > this.totalPageCount  ) {
+		int  pageNo          =  srchDto.getPageNo(); 
+		if( pageNo > this.totalPageCount  ) { // 현재 페이지가 전체 페이지 count보다 크다면 변경
 			pageNo   = this.totalPageCount;
 			srchDto.setPageNo( pageNo );
 		}

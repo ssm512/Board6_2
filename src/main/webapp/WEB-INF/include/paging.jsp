@@ -23,7 +23,7 @@
       <c:forEach var="pagenum" begin="${startnum}" end="${endnum}" step="1">
       	<c:if test="${ pagenum le totalpagecount }">
 	        <td>
-	          <a href="/BoardPaging/List?menu_id=${menu_id}&nowpage=${pagenum}&searchType=${searchType}&keyword=${keyword}">
+	          <a href="/BoardPaging/List?menu_id=${menu_id}&nowpage=${pagenum}&searchType=${searchType}&keyword=${keyword}" >
 	          ${ pagenum }
 	          </a>
 	        </td>
